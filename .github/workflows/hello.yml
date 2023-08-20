@@ -1,4 +1,4 @@
-name: Hello world
+name: Run All Tests
 
 on:
   push:
@@ -7,8 +7,32 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  greeting:
     runs-on: ubuntu-latest
     steps:
-      - name: Hello step
-        run: echo "Hello world"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check service availability
+        run: |
+          curl -i -X GET https://your-calculator-service/calculator/greeting
+        env:
+          YOUR_CALCULATOR_SERVICE: https://your-calculator-service
+
+  calculation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Perform addition
+        run: |
+          curl -i -X POST -H "Content-Type: application/json" -d '{"first": 5, "second": 3}' https://your-calculator-service/calculator/add
+        env:
+          YOUR_CALCULATOR_SERVICE: https://your-calculator-service
+
+      - name: Perform subtraction
+        run: |
+          curl -i -X POST -H "Content-Type: application/json" -d '{"first": 10, "second": 4}' https://your-calculator-service/calculator/subtract
+        env:
+          YOUR_CALCULATOR_SERVICE: https://your-calculator-service
